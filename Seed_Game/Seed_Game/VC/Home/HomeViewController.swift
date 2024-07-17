@@ -7,12 +7,18 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     
     @IBOutlet private weak var priceBuytextField: UITextField!
     @IBOutlet private weak var timeTextField: UITextField!
     @IBOutlet private weak var priceListTextField: UITextField!
     @IBOutlet private weak var countListTextField: UITextField!
+    
+    @IBOutlet private weak var commonTextField: UITextField!
+    @IBOutlet private weak var uncommonTextField: UITextField!
+    @IBOutlet private weak var rareTextField: UITextField!
+    @IBOutlet private weak var epicTextField: UITextField!
+    @IBOutlet private weak var legendTextField: UITextField!
     
     @IBOutlet private weak var eggLabel: UILabel!
     @IBOutlet private weak var boughtLabel: UILabel!
@@ -26,6 +32,8 @@ class ViewController: UIViewController {
     
     var rarity: RarityType? = .common
     var category: Category? = .egg
+    
+    var viewModel: HomeViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +54,26 @@ class ViewController: UIViewController {
         raritySegment.addTarget(self, action: #selector(segmentedControlChanged(_:)), for: .valueChanged)
         typeSegment.addTarget(self, action: #selector(typeControlChanged), for: .valueChanged)
         
+        suggestPriceAll()
+    }
+    
+    let suggestEggs = [27, 80, 300, 700, 2000]
+    let suggestWorm = [0.03, 0.1, 1.5, 13, 70]
+    
+    func suggestPriceAll() {
+        if category == .egg {
+            commonTextField.text = "\(suggestEggs[0])"
+            uncommonTextField.text = "\(suggestEggs[1])"
+            rareTextField.text = "\(suggestEggs[2])"
+            epicTextField.text = "\(suggestEggs[3])"
+            legendTextField.text = "\(suggestEggs[4])"
+        } else {
+            commonTextField.text = "\(suggestWorm[0])"
+            uncommonTextField.text = "\(suggestWorm[1])"
+            rareTextField.text = "\(suggestWorm[2])"
+            epicTextField.text = "\(suggestWorm[3])"
+            legendTextField.text = "\(suggestWorm[4])"
+        }
     }
     
     func setTextField(list: [UITextField]) {
@@ -64,16 +92,24 @@ class ViewController: UIViewController {
     @objc func segmentedControlChanged(_ sender: UISegmentedControl) {
         priceBuytextField.text = PriceSuggest(rawValue: typeSegment.selectedSegmentIndex)?.price(rarity: raritySegment.selectedSegmentIndex).string
         rarity = Rarity(rawValue: raritySegment.selectedSegmentIndex)?.type
+        
+        suggestPriceAll()
     }
     
     @objc func typeControlChanged() {
         priceBuytextField.text = PriceSuggest(rawValue: typeSegment.selectedSegmentIndex)?.price(rarity: raritySegment.selectedSegmentIndex).string
         
         category = Category(rawValue: typeSegment.selectedSegmentIndex)
+        
+        suggestPriceAll()
     }
     
-    @IBAction func getApiTapped() {
+    @IBAction func luckyButtonTapped() {
         getAPI()
+    }
+    
+    @IBAction func luckyAllButtonTapped() {
+        getAllMarket()
     }
     
     @IBAction func configTapped() {
@@ -190,7 +226,7 @@ class ViewController: UIViewController {
             if item.price < target {
                 itemNeedBuy = item
                 self.eggLabel.text = "\(self.eggLabel.text&)\n" + "item: \(item.price), Type: \(item.id) \n"
-                self.buyItem(id: item.id)
+                self.buyItem(id: item.id, item: item, isAll: false)
                 return
             }
         }
@@ -212,7 +248,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func buyItem(id: String) {
+    func buyItem(id: String, item: Item, isAll: Bool) {
         
         print("Đã call api mua rồi nha =]]]")
         
@@ -240,15 +276,14 @@ class ViewController: UIViewController {
                     let str = String(data: data, encoding: .utf8)
                     print(str ?? "")
                     if let _ = try? JSONDecoder().decode(BuyResponse.self, from: data) {
-                        self.boughtLabel.text = "Đã mua THÀNH CÔNG: \(id)"
-                        self.recallApiWhenCompleteBuy()
+                        let type = self.category == .egg ? item.eggType& : item.wormType&
+                        self.boughtLabel.text = "Đã mua THÀNH CÔNG: \(type.uppercased()), price: \(item.price)"
                     } else if let error = try? JSONDecoder().decode(ERROR.self, from: data) {
                         self.boughtLabel.text = "LỖI: \(error.message ?? "")"
-                        self.recallApiWhenCompleteBuy()
                     } else {
                         self.boughtLabel.text = "LỖI KHÔNG XÁC ĐỊNH."
-                        self.recallApiWhenCompleteBuy()
                     }
+                    self.recallApiWhenCompleteBuy(isAll: isAll)
                 }
             }
             
@@ -257,10 +292,10 @@ class ViewController: UIViewController {
         task.resume()
     }
     
-    func recallApiWhenCompleteBuy() {
+    func recallApiWhenCompleteBuy(isAll: Bool) {
         if self.autoSwitch.isOn {
             delay(3) {
-                self.getAPI()
+                isAll ? self.getAllMarket() : self.getAPI()
             }
         }
     }
@@ -436,7 +471,15 @@ class ViewController: UIViewController {
     }
     
     private func getAllMarket() {
-        let url = URL(string: "https://elb.seeddao.org/api/v1/market?market_type=egg&egg_type=&sort_by_price=&sort_by_updated_at=DESC&page=1")!
+        DispatchQueue.main.async {
+            self.eggLabel.text = "Đang tìm...."
+            self.boughtLabel.isHidden = true
+            self.resultLabel.text = "Result:"
+        }
+        
+        let type = category == .egg ? "egg" : "worm"
+        
+        let url = URL(string: "https://elb.seeddao.org/api/v1/market?market_type=\(type)&egg_type=&sort_by_price=&sort_by_updated_at=DESC&page=1")!
  
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = ApiUtils.shared.headersGet
@@ -445,16 +488,107 @@ class ViewController: UIViewController {
             if let error = error {
                 print(error)
             } else if let data = data {
-                let str = String(data: data, encoding: .utf8)
-                print(str ?? "")
+                DispatchQueue.main.async {
+                    let str = String(data: data, encoding: .utf8)
+                    //                print(str ?? "")
+                    self.resultLabel.text = "Result: have data\n"
+                    if let marketResponse = try? JSONDecoder().decode(ItemResponse.self, from: data), let _ = marketResponse.data {
+                        print("List data: \(marketResponse.data?.items?.count)")
+                        if let list = marketResponse.data?.items, !list.isEmpty {
+                            self.queryItemAll(list: list)
+                        }
+                    } else if let error = try? JSONDecoder().decode(ERROR.self, from: data) {
+                        self.eggLabel.text = "LỖI: \(error.message ?? "")"
+                        if error.message != "telegram data expired" {
+                            self.getAllMarket()
+                        }
+                    }  else {
+                        self.recallApiIfAutoALL()
+                    }
+                    self.currentDataTask = nil
+                }
             }
         }
 
         task.resume()
     }
+    
+    func queryItemAll(list: [Item]) {
+        var itemNeedBuy: Item?
+        
+        let count = Int(self.countListTextField.text&) ?? 2
+        for (index, item) in list.enumerated() {
+            let type = category == .egg ? item.eggType& : item.wormType&
+            if index < 5 {
+                guard let category else { return }
+                self.resultLabel.text = (self.resultLabel.text&) + "\n \(category.type.uppercased()): \(type), price: \(item.price)"
+            }
+            
+            switch RarityType(rawValue: type) {
+            case .common:
+                let target = commonTextField.text&.toDouble
+                if item.price < target {
+                    itemNeedBuy = item
+                    self.eggLabel.text = "\(self.eggLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
+                    self.buyItem(id: item.id, item: item, isAll: true)
+                    return
+                }
+            case .uncommon:
+                let target = uncommonTextField.text&.toDouble
+                if item.price < target {
+                    itemNeedBuy = item
+                    self.eggLabel.text = "\(self.eggLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
+                    self.buyItem(id: item.id, item: item, isAll: true)
+                    return
+                }
+            case .rare:
+                let target = rareTextField.text&.toDouble
+                if item.price < target {
+                    itemNeedBuy = item
+                    self.eggLabel.text = "\(self.eggLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
+                    self.buyItem(id: item.id, item: item, isAll: true)
+                    return
+                }
+            case .epic:
+                let target = epicTextField.text&.toDouble
+                if item.price < target {
+                    itemNeedBuy = item
+                    self.eggLabel.text = "\(self.eggLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
+                    self.buyItem(id: item.id, item: item, isAll: true)
+                    return
+                }
+            case .legendary:
+                let target = legendTextField.text&.toDouble
+                if item.price < target {
+                    itemNeedBuy = item
+                    self.eggLabel.text = "\(self.eggLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
+                    self.buyItem(id: item.id, item: item, isAll: true)
+                    return
+                }
+            default:
+                break
+            }
+        }
+        
+        if let _ = itemNeedBuy {
+            self.boughtLabel.isHidden = false
+        } else {
+            self.eggLabel.text = "Không có. Thử lại!!!"
+            recallApiIfAutoALL()
+        }
+    }
+    
+    func recallApiIfAutoALL() {
+        if self.autoSwitch.isOn {
+            let time = self.timeTextField.text&.toDouble
+            delay(time) {
+                self.getAllMarket()
+            }
+        }
+    }
 }
 
-extension ViewController: UITextFieldDelegate {
+extension HomeViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {

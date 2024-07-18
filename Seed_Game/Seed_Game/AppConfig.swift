@@ -17,16 +17,16 @@ enum PriceSuggest: Int {
         switch self {
         case .worm:
             switch Rarity(rawValue: rarity)?.type {
-            case .common: return 0.1
-            case .uncommon: return 0.2
-            case .rare: return 1.5
-            case .epic: return 14
+            case .common: return 0.01
+            case .uncommon: return 0.04
+            case .rare: return 1.1
+            case .epic: return 11
             case .legendary: return 60
             case nil: return 0
             }
         case .egg:
             switch Rarity(rawValue: rarity)?.type {
-            case .common: return 27
+            case .common: return 29
             case .uncommon: return 60
             case .rare: return 200
             case .epic: return 300

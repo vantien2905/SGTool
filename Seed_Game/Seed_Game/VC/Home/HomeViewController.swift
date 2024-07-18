@@ -544,12 +544,13 @@ class HomeViewController: UIViewController {
         self.resultLabel.text = ""
         for (index, item) in list.enumerated() {
             let type = category == .egg ? item.eggType&.uppercased() : item.wormType&.uppercased()
+            let typeCheck = category == .egg ? item.eggType& : item.wormType&
             if index < 5 {
                 guard let category else { return }
                 self.resultLabel.text = (self.resultLabel.text&) + "\(category.type): \(type), price: \(item.price)\n"
             }
             
-            switch RarityType(rawValue: type) {
+            switch RarityType(rawValue: typeCheck) {
             case .common:
                 let target = commonTextField.text&.toDouble
                 if item.price < target {

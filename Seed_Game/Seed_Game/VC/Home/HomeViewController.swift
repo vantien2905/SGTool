@@ -138,27 +138,27 @@ class HomeViewController: UIViewController {
             price = "\(doublePrice)"
         }
         let count = countListTextField.text&
+        let message = "Có chắc muốn bán \n\n\(count) (\(type) - \(rare))\n\n với giá [\(price) SEED]?\n"
         
         SwiftAlertView.show(title: "Xác nhận",
-                            message: "",
-                            buttonTitles: "ĐỒNG Ý", "KHÔNG") {
+                            message: message,
+                            buttonTitles: "Đồng ý", "KHÔNG") {
             $0.style = .light
             
-            let message = "Có chắc muốn bán \(count) Item\n [\(type) - \(rare)] với giá \n[\(price) SEED]?"
             let attributedString = NSMutableAttributedString(string: message)
-            let rangeCount = (message as NSString).range(of: "\(count) Item\n [\(type) - \(rare)]")
-            attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: rangeCount)
+            let rangeCount = (message as NSString).range(of: "\(count) (\(type) - \(rare))")
+            attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .semibold), range: rangeCount)
             attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: rangeCount)
             
             let rangePrice = (message as NSString).range(of: "[\(price) SEED]")
-            attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: rangePrice)
+            attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .semibold), range: rangePrice)
             attributedString.addAttribute(.foregroundColor, value: UIColor.systemGreen, range: rangePrice)
             $0.messageLabel.attributedText = attributedString
         }
         .onButtonClicked { _, buttonIndex in
             print("Button Clicked At Index \(buttonIndex)")
             if buttonIndex == 0 {
-//                self.list()
+                self.list()
             }
         }
         

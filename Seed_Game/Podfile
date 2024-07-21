@@ -8,6 +8,7 @@ target 'Seed_Game' do
   # Pods for Seed_Game
 #  pod 'netfox'
   pod 'IQKeyboardManagerSwift'
+  pod 'SwiftAlertView'
 
   post_install do |installer|
     installer.generated_projects.each do |project|

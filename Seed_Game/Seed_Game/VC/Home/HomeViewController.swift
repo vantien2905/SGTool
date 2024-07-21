@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftAlertView
 
 class HomeViewController: UIViewController {
     
@@ -13,6 +14,7 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var timeTextField: UITextField!
     @IBOutlet private weak var priceListTextField: UITextField!
     @IBOutlet private weak var countListTextField: UITextField!
+    @IBOutlet private weak var pageListTextField: UITextField!
     
     @IBOutlet private weak var commonTextField: UITextField!
     @IBOutlet private weak var uncommonTextField: UITextField!
@@ -41,13 +43,16 @@ class HomeViewController: UIViewController {
         
         timeTextField.text = "0.3"
         
-        countListTextField.text = "2"
+        countListTextField.text = "5"
+        
+        pageListTextField.text = "1"
         
         setTextField(list: [
             priceBuytextField,
             priceListTextField,
             timeTextField,
-            countListTextField
+            countListTextField,
+            pageListTextField
         ])
         
         hideLoading()
@@ -57,8 +62,8 @@ class HomeViewController: UIViewController {
         suggestPriceAll()
     }
     
-    let suggestEggs = [30, 70, 250, 400, 500]
-    let suggestWorm = [0.03, 0.06, 1.1, 11, 60]
+    let suggestEggs = [30, 70, 300, 400, 500]
+    let suggestWorm = [0.03, 0.03, 1.1, 11, 75]
     
     func suggestPriceAll() {
         if category == .egg {
@@ -122,6 +127,7 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func listButtonTapped() {
+        
         let type = (category?.type ?? "").uppercased()
         let rare = (rarity?.rawValue ?? "").uppercased()
         guard let doublePrice = Double(priceListTextField.text&) else { return }
@@ -132,25 +138,29 @@ class HomeViewController: UIViewController {
             price = "\(doublePrice)"
         }
         let count = countListTextField.text&
-        // Declare Alert
-        let dialogMessage = UIAlertController(title: "Confirm", message: "Có chắc muốn bán [\(count) Item] [\(type) - \(rare)] với giá [\(price) SEED]?", preferredStyle: .alert)
-
-        // Create OK button with action handler
-        let ok = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
-             self.list()
-        })
-
-        // Create Cancel button with action handlder
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (action) -> Void in
-            print("Cancel button click...")
+        
+        SwiftAlertView.show(title: "Xác nhận",
+                            message: "",
+                            buttonTitles: "ĐỒNG Ý", "KHÔNG") {
+            $0.style = .light
+            
+            let message = "Có chắc muốn bán \(count) Item\n [\(type) - \(rare)] với giá \n[\(price) SEED]?"
+            let attributedString = NSMutableAttributedString(string: message)
+            let rangeCount = (message as NSString).range(of: "\(count) Item\n [\(type) - \(rare)]")
+            attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: rangeCount)
+            attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: rangeCount)
+            
+            let rangePrice = (message as NSString).range(of: "[\(price) SEED]")
+            attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: rangePrice)
+            attributedString.addAttribute(.foregroundColor, value: UIColor.systemGreen, range: rangePrice)
+            $0.messageLabel.attributedText = attributedString
         }
-
-        //Add OK and Cancel button to dialog message
-        dialogMessage.addAction(ok)
-        dialogMessage.addAction(cancel)
-
-        // Present dialog message to user
-        self.present(dialogMessage, animated: true, completion: nil)
+        .onButtonClicked { _, buttonIndex in
+            print("Button Clicked At Index \(buttonIndex)")
+            if buttonIndex == 0 {
+//                self.list()
+            }
+        }
         
     }
     
@@ -198,7 +208,13 @@ class HomeViewController: UIViewController {
                             self.queryItem(list: list)
                         }
                     } else if let error = try? JSONDecoder().decode(ERROR.self, from: data) {
-                        self.statusBuyLabel.text = "LỖI: \(error.message ?? "")"
+                        self.statusBuyLabel.setHighlight(
+                            text: "LỖI: \(error.message&)",
+                            font: .systemFont(ofSize: 18),
+                            color: .black,
+                            highlightText: "\(error.message&)",
+                            highlightFont: .systemFont(ofSize: 18, weight: .semibold),
+                            highlightColor: .red)
                         if error.message != "telegram data expired" {
                             self.getAPI()
                         }
@@ -278,14 +294,28 @@ class HomeViewController: UIViewController {
                     print(str ?? "")
                     if let _ = try? JSONDecoder().decode(BuyResponse.self, from: data) {
                         let type = self.category == .egg ? item.eggType& : item.wormType&
-                        self.statusBuyLabel.text = "Đã mua THÀNH CÔNG: \(type.uppercased()), price: \(item.price)"
-                        self.statusBuyLabel.textColor = .green
+                        self.statusBuyLabel.setHighlight(
+                            text: "Đã mua THÀNH CÔNG: \(type.uppercased()), price: \(item.price)",
+                            font: .systemFont(ofSize: 18),
+                            color: .systemGreen,
+                            highlightText: "\(type.uppercased()), price: \(item.price)",
+                            highlightFont: .systemFont(ofSize: 18, weight: .semibold),
+                            highlightColor: .systemGreen)
                     } else if let error = try? JSONDecoder().decode(ERROR.self, from: data) {
-                        self.statusBuyLabel.text = "LỖI: \(error.message ?? "")"
-                        self.statusBuyLabel.textColor = .red
+                        self.statusBuyLabel.setHighlight(
+                            text: "LỖI: \(error.message&)",
+                            font: .systemFont(ofSize: 18),
+                            color: .black,
+                            highlightText: "\(error.message&)",
+                            highlightFont: .systemFont(ofSize: 18, weight: .semibold),
+                            highlightColor: .red)
                     } else {
                         self.statusBuyLabel.text = "LỖI KHÔNG XÁC ĐỊNH."
                         self.statusBuyLabel.textColor = .red
+                        self.statusBuyLabel.setAttributedText(
+                            text: "LỖI KHÔNG XÁC ĐỊNH.",
+                            font: .systemFont(ofSize: 18, weight: .semibold),
+                            color: .red)
                     }
                     self.recallApiWhenCompleteBuy(isAll: isAll)
                 }
@@ -306,8 +336,9 @@ class HomeViewController: UIViewController {
     
     func getMyItems(complete: @escaping (_ items: [Item]) -> Void) {
         self.showLoading()
+        let page = pageListTextField.text&
         let type = typeSegment.selectedSegmentIndex == 0 ? "egg" : "worms"
-        let url = URL(string: "https://elb.seeddao.org/api/v1/\(type)/me?page=1")!
+        let url = URL(string: "https://elb.seeddao.org/api/v1/\(type)/me?page=\(page)")!
         
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = ApiUtils.shared.headersBuy

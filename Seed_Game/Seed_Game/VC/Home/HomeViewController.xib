@@ -17,6 +17,7 @@
                 <outlet property="epicTextField" destination="OGQ-IS-ic5" id="8Jj-Aw-c6Q"/>
                 <outlet property="legendTextField" destination="FRh-PA-STu" id="64I-qS-o2x"/>
                 <outlet property="loadingView" destination="XkB-Xz-59I" id="KjJ-sH-4yf"/>
+                <outlet property="pageListTextField" destination="1m8-jh-3bl" id="igF-rN-LUD"/>
                 <outlet property="priceBuytextField" destination="9xa-4v-HMN" id="X11-hF-uOR"/>
                 <outlet property="priceListTextField" destination="HLW-fb-C5Z" id="uDh-qA-LIu"/>
                 <outlet property="rareTextField" destination="dQe-2P-KHJ" id="and-Dv-Muj"/>
@@ -37,7 +38,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xZi-pl-p2c">
-                    <rect key="frame" x="16" y="79" width="361" height="311"/>
+                    <rect key="frame" x="16" y="79" width="361" height="314.66666666666669"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="WQx-30-MBK">
                             <rect key="frame" x="0.0" y="0.0" width="361" height="206"/>
@@ -119,13 +120,13 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YL6-Qb-UaP">
-                            <rect key="frame" x="0.0" y="253" width="361" height="18"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <rect key="frame" x="0.0" y="252.99999999999997" width="361" height="21.666666666666657"/>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p89-Cs-MgC">
-                            <rect key="frame" x="0.0" y="281" width="361" height="30"/>
+                            <rect key="frame" x="0.0" y="284.66666666666669" width="361" height="30"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="TqV-hO-f4f"/>
@@ -193,17 +194,22 @@
                             <rect key="frame" x="0.0" y="0.0" width="361" height="38.333333333333336"/>
                             <subviews>
                                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nhập giá bán" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HLW-fb-C5Z">
-                                    <rect key="frame" x="0.0" y="0.0" width="112.33333333333333" height="38.333333333333336"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="38.333333333333336"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Số lượng" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tYM-IL-Duv">
-                                    <rect key="frame" x="124.33333333333334" y="0.0" width="112.33333333333334" height="38.333333333333336"/>
+                                    <rect key="frame" x="93.333333333333343" y="0.0" width="81.333333333333343" height="38.333333333333336"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Page" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1m8-jh-3bl">
+                                    <rect key="frame" x="186.66666666666666" y="0.0" width="80.999999999999972" height="38.333333333333336"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObG-5A-KLI">
-                                    <rect key="frame" x="248.66666666666671" y="0.0" width="112.33333333333334" height="38.333333333333336"/>
+                                    <rect key="frame" x="279.66666666666669" y="0.0" width="81.333333333333314" height="38.333333333333336"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="List"/>
                                     <userDefinedRuntimeAttributes>

@@ -26,6 +26,7 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var statusBuyLabel: UILabel!
     @IBOutlet private weak var autoSwitch: UISwitch!
     @IBOutlet private weak var resultLabel: UILabel!
+    @IBOutlet private weak var buySuccessLabel: UILabel!
     
     @IBOutlet private weak var typeSegment: UISegmentedControl!
     @IBOutlet private weak var raritySegment: UISegmentedControl!
@@ -41,9 +42,9 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         priceBuytextField.text = "29"
         
-        timeTextField.text = "0.3"
+        timeTextField.text = "0.1"
         
-        countListTextField.text = "5"
+        countListTextField.text = "4"
         
         pageListTextField.text = "1"
         
@@ -60,10 +61,12 @@ class HomeViewController: UIViewController {
         typeSegment.addTarget(self, action: #selector(typeControlChanged), for: .valueChanged)
         
         suggestPriceAll()
+        
+        buySuccessLabel.textColor = .systemGreen
     }
     
-    let suggestEggs = [30, 70, 300, 400, 500]
-    let suggestWorm = [0.03, 0.03, 1.1, 11, 75]
+    let suggestEggs = [45, 150, 350, 400, 500]
+    let suggestWorm = [0.03, 0.06, 1.1, 11, 75]
     
     func suggestPriceAll() {
         if category == .egg {
@@ -177,7 +180,7 @@ class HomeViewController: UIViewController {
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = ApiUtils.shared.headersGet
         
-        print(request.cURL())
+//        print(request.cURL())
         
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 1.0
@@ -187,7 +190,7 @@ class HomeViewController: UIViewController {
         // Kiểm tra nếu task hiện tại đang chạy thì hủy nó
        if let task = currentDataTask, task.state == .running {
            return
-           print("Current data task has been cancelled")
+//           print("Current data task has been cancelled")
        }
         
         currentDataTask = session.dataTask(with: request) { [weak self] (data, response, error) in
@@ -199,11 +202,11 @@ class HomeViewController: UIViewController {
                 self.getAPI()
             } else if let data = data {
                 DispatchQueue.main.async {
-                    let str = String(data: data, encoding: .utf8)
+//                    let str = String(data: data, encoding: .utf8)
                     //                print(str ?? "")
                     self.titleResultLabel.text = "Result: HAVE DATA"
                     if let marketResponse = try? JSONDecoder().decode(ItemResponse.self, from: data), let _ = marketResponse.data {
-                        print("List data: \(marketResponse.data?.items?.count)")
+//                        print("List data: \(marketResponse.data?.items?.count)")
                         if let list = marketResponse.data?.items, !list.isEmpty {
                             self.queryItem(list: list)
                         }
@@ -243,7 +246,9 @@ class HomeViewController: UIViewController {
             if item.price < target {
                 itemNeedBuy = item
                 self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "item: \(item.price), Type: \(type.uppercased()) \n"
-                self.buyItem(id: item.id, item: item, isAll: false)
+                self.buyItem(id: item.id, item: item, isAll: false, complete: { [weak self] in
+                    self?.recallApiWhenCompleteBuy(isAll: true)
+                })
                 return
             }
         }
@@ -265,7 +270,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    func buyItem(id: String, item: Item, isAll: Bool) {
+    func buyItem(id: String, item: Item, isAll: Bool, complete: @escaping VoidClosure) {
         
         print("Đã call api mua rồi nha =]]]")
         
@@ -301,6 +306,7 @@ class HomeViewController: UIViewController {
                             highlightText: "\(type.uppercased()), price: \(item.price)",
                             highlightFont: .systemFont(ofSize: 18, weight: .semibold),
                             highlightColor: .systemGreen)
+                        self.buySuccessLabel.text = self.buySuccessLabel.text& + "Đã mua THÀNH CÔNG: \(type.uppercased()), price: \(item.price) \n"
                     } else if let error = try? JSONDecoder().decode(ERROR.self, from: data) {
                         self.statusBuyLabel.setHighlight(
                             text: "LỖI: \(error.message&)",
@@ -317,9 +323,10 @@ class HomeViewController: UIViewController {
                             font: .systemFont(ofSize: 18, weight: .semibold),
                             color: .red)
                     }
-                    self.recallApiWhenCompleteBuy(isAll: isAll)
+//                    self.recallApiWhenCompleteBuy(isAll: isAll)
                 }
             }
+            complete()
             
         }
         
@@ -349,8 +356,8 @@ class HomeViewController: UIViewController {
             } else if let data = data {
                 let str = String(data: data, encoding: .utf8)
                 print(str ?? "")
-                decode(data) { [weak self] (myEgg: ItemResponse) in
-                    guard let self else { return }
+                decode(data) { (myEgg: ItemResponse) in
+//                    guard let self else { return }
                     if let items = myEgg.data?.items {
                         complete(items)
                     }
@@ -455,7 +462,7 @@ class HomeViewController: UIViewController {
         request.allHTTPHeaderFields = ApiUtils.shared.headersBuy
         request.httpBody = data as Data
         
-        print(request.cURL())
+//        print(request.cURL())
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
@@ -519,7 +526,7 @@ class HomeViewController: UIViewController {
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = ApiUtils.shared.headersGet
         
-        print(request.cURL())
+//        print(request.cURL())
         
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = 1.0
@@ -529,7 +536,7 @@ class HomeViewController: UIViewController {
         // Kiểm tra nếu task hiện tại đang chạy thì hủy nó
        if let task = currentDataTaskAll, task.state == .running {
            return
-           print("Current data task has been cancelled")
+//           print("Current data task has been cancelled")
        }
 
         currentDataTaskAll = session.dataTask(with: request) { (data, response, error) in
@@ -541,11 +548,11 @@ class HomeViewController: UIViewController {
                 self.getAllMarket()
             } else if let data = data {
                 DispatchQueue.main.async {
-                    let str = String(data: data, encoding: .utf8)
+//                    let str = String(data: data, encoding: .utf8)
                     //                print(str ?? "")
                     self.titleResultLabel.text = "Result: HAVE DATA"
                     if let marketResponse = try? JSONDecoder().decode(ItemResponse.self, from: data), let _ = marketResponse.data {
-                        print("List data: \(marketResponse.data?.items?.count)")
+//                        print("List data: \(marketResponse.data?.items?.count)")
                         if let list = marketResponse.data?.items, !list.isEmpty {
                             self.queryItemAll(list: list)
                         } else {
@@ -568,11 +575,15 @@ class HomeViewController: UIViewController {
         currentDataTaskAll?.resume()
     }
     
+    
     func queryItemAll(list: [Item]) {
-        var itemNeedBuy: Item?
+        var itemNeedBuy: [Item] = []
         
-        let count = Int(self.countListTextField.text&) ?? 2
+//        let count = Int(self.countListTextField.text&) ?? 2
         self.resultLabel.text = ""
+        
+        let dispatchGroup = DispatchGroup()
+        
         for (index, item) in list.enumerated() {
             let type = category == .egg ? item.eggType&.uppercased() : item.wormType&.uppercased()
             let typeCheck = category == .egg ? item.eggType& : item.wormType&
@@ -585,49 +596,48 @@ class HomeViewController: UIViewController {
             case .common:
                 let target = commonTextField.text&.toDouble
                 if item.price < target {
-                    itemNeedBuy = item
-                    self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
-                    self.buyItem(id: item.id, item: item, isAll: true)
-                    return
+                    callAPiBuy(item: item, type: type)
                 }
             case .uncommon:
                 let target = uncommonTextField.text&.toDouble
                 if item.price < target {
-                    itemNeedBuy = item
-                    self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
-                    self.buyItem(id: item.id, item: item, isAll: true)
-                    return
+                    callAPiBuy(item: item, type: type)
                 }
             case .rare:
                 let target = rareTextField.text&.toDouble
                 if item.price < target {
-                    itemNeedBuy = item
-                    self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
-                    self.buyItem(id: item.id, item: item, isAll: true)
-                    return
+                    callAPiBuy(item: item, type: type)
                 }
             case .epic:
                 let target = epicTextField.text&.toDouble
                 if item.price < target {
-                    itemNeedBuy = item
-                    self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
-                    self.buyItem(id: item.id, item: item, isAll: true)
-                    return
+                    callAPiBuy(item: item, type: type)
                 }
             case .legendary:
                 let target = legendTextField.text&.toDouble
                 if item.price < target {
-                    itemNeedBuy = item
-                    self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
-                    self.buyItem(id: item.id, item: item, isAll: true)
-                    return
+                    callAPiBuy(item: item, type: type)
                 }
             default:
                 break
             }
         }
         
-        if let _ = itemNeedBuy {
+        func callAPiBuy(item: Item, type: String) {
+            itemNeedBuy.append(item)
+            self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(type), price: \(item.price) \n"
+            
+            dispatchGroup.enter()
+            self.buyItem(id: item.id, item: item, isAll: true, complete: {
+                dispatchGroup.leave()
+            })
+        }
+        
+        if !itemNeedBuy.isEmpty {
+            dispatchGroup.notify(queue: .main, execute: { [weak self] in
+                self?.recallApiWhenCompleteBuy(isAll: true)
+            })
+            
         } else {
             self.statusBuyLabel.text = "Không có. Thử lại!!!"
             recallApiIfAutoALL()

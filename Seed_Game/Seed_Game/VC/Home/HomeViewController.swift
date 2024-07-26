@@ -38,6 +38,8 @@ class HomeViewController: UIViewController {
     
     var viewModel: HomeViewModel!
     
+    var currentPage = 2
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         priceBuytextField.text = "29"
@@ -290,6 +292,7 @@ class HomeViewController: UIViewController {
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] (data, response, error) in
             guard let self else { return }
+            complete()
             DispatchQueue.main.async {
                 if let error = error {
                     print(error)
@@ -326,8 +329,6 @@ class HomeViewController: UIViewController {
 //                    self.recallApiWhenCompleteBuy(isAll: isAll)
                 }
             }
-            complete()
-            
         }
         
         task.resume()
@@ -335,7 +336,7 @@ class HomeViewController: UIViewController {
     
     func recallApiWhenCompleteBuy(isAll: Bool) {
         if self.autoSwitch.isOn {
-            delay(3) {
+            delay(0.1) {
                 isAll ? self.getAllMarket() : self.getAPI()
             }
         }
@@ -517,11 +518,12 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             self.statusBuyLabel.textColor = .black
             self.titleResultLabel.text = "Result: ĐANG TÌM...."
+            self.currentPage = self.currentPage == 2 ? 1 : 2
         }
         
         let type = category == .egg ? "egg" : "worm"
         
-        let url = URL(string: "https://elb.seeddao.org/api/v1/market?market_type=\(type)&egg_type=&sort_by_price=&sort_by_updated_at=DESC&page=1")!
+        let url = URL(string: "https://elb.seeddao.org/api/v1/market?market_type=\(type)&egg_type=&sort_by_price=&sort_by_updated_at=DESC&page=\(currentPage)")!
  
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = ApiUtils.shared.headersGet
@@ -542,10 +544,10 @@ class HomeViewController: UIViewController {
         currentDataTaskAll = session.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 print(error)
+                self.getAllMarket()
                 DispatchQueue.main.async {
                     self.titleResultLabel.text = "Result: NO DATA"
                 }
-                self.getAllMarket()
             } else if let data = data {
                 DispatchQueue.main.async {
 //                    let str = String(data: data, encoding: .utf8)

@@ -14,7 +14,6 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var timeTextField: UITextField!
     @IBOutlet private weak var priceListTextField: UITextField!
     @IBOutlet private weak var countListTextField: UITextField!
-    @IBOutlet private weak var pageListTextField: UITextField!
     
     @IBOutlet private weak var commonTextField: UITextField!
     @IBOutlet private weak var uncommonTextField: UITextField!
@@ -25,9 +24,11 @@ class HomeViewController: UIViewController {
     @IBOutlet private weak var titleResultLabel: UILabel!
     @IBOutlet private weak var statusBuyLabel: UILabel!
     @IBOutlet private weak var autoSwitch: UISwitch!
-    @IBOutlet private weak var resultLabel: UILabel!
+    @IBOutlet private weak var failedLabel: UITextView!
+    @IBOutlet private weak var successLabel: UITextView!
     @IBOutlet private weak var buySuccessLabel: UILabel!
     
+    @IBOutlet private weak var titleSellLabel: UILabel!
     @IBOutlet private weak var typeSegment: UISegmentedControl!
     @IBOutlet private weak var raritySegment: UISegmentedControl!
     @IBOutlet private weak var removeAllEggButton: UIButton!
@@ -39,7 +40,11 @@ class HomeViewController: UIViewController {
     var viewModel: HomeViewModel!
     
     var currentPage = 2
-    
+    let failedBuyQueue = LimitedQueue<String>(maxSize: 5)
+    let successBuyQueue = LimitedQueue<String>(maxSize: 5)
+    let proccessedBuyQueue = LimitedQueue<String>(maxSize: 10)
+    var totalSeedSpent: Double = 0
+    var countWorm: [Int] = [0, 0, 0, 0, 0]
     override func viewDidLoad() {
         super.viewDidLoad()
         priceBuytextField.text = "29"
@@ -48,14 +53,11 @@ class HomeViewController: UIViewController {
         
         countListTextField.text = "4"
         
-        pageListTextField.text = "1"
-        
         setTextField(list: [
             priceBuytextField,
             priceListTextField,
             timeTextField,
-            countListTextField,
-            pageListTextField
+            countListTextField
         ])
         
         hideLoading()
@@ -67,8 +69,8 @@ class HomeViewController: UIViewController {
         buySuccessLabel.textColor = .systemGreen
     }
     
-    let suggestEggs = [45, 150, 350, 400, 500]
-    let suggestWorm = [0.03, 0.06, 1.1, 11, 75]
+    let suggestEggs = [65, 150, 350, 400, 500]
+    let suggestWorm = [0.101, 0.201, 1.1, 11, 75]
     
     func suggestPriceAll() {
         if category == .egg {
@@ -120,6 +122,8 @@ class HomeViewController: UIViewController {
     
     @IBAction func luckyAllButtonTapped() {
         getAllMarket()
+        self.totalSeedSpent = 0
+        self.countWorm = [0, 0, 0, 0, 0]
     }
     
     @IBAction func configTapped() {
@@ -239,16 +243,13 @@ class HomeViewController: UIViewController {
         let target = Double(self.priceBuytextField.text&) ?? 1.0
         let count = Int(self.countListTextField.text&) ?? 2
         
-        self.resultLabel.text = ""
         for (index, item) in list.enumerated() {
             let type = category == .egg ? item.eggType& : item.wormType&
-            if index < count {
-                self.resultLabel.text = (self.resultLabel.text&) + "Type: \(type.uppercased()), price: \(item.price)\n"
-            }
             if item.price < target {
                 itemNeedBuy = item
                 self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "item: \(item.price), Type: \(type.uppercased()) \n"
                 self.buyItem(id: item.id, item: item, isAll: false, complete: { [weak self] in
+                    self?.proccessedBuyQueue.enqueue(item.id)
                     self?.recallApiWhenCompleteBuy(isAll: true)
                 })
                 return
@@ -258,7 +259,7 @@ class HomeViewController: UIViewController {
         if let _ = itemNeedBuy {
             
         } else {
-            self.statusBuyLabel.text = "Không có. Thử lại!!!"
+//            self.statusBuyLabel.text = "Không có. Thử lại!!!"
             self.recallApiIfAuto()
         }
     }
@@ -273,7 +274,6 @@ class HomeViewController: UIViewController {
     }
     
     func buyItem(id: String, item: Item, isAll: Bool, complete: @escaping VoidClosure) {
-        
         print("Đã call api mua rồi nha =]]]")
         
         self.statusBuyLabel.text = "Đã gọi api mua...."
@@ -294,6 +294,7 @@ class HomeViewController: UIViewController {
             guard let self else { return }
             complete()
             DispatchQueue.main.async {
+                let type = self.category == .egg ? item.eggType& : item.wormType&
                 if let error = error {
                     print(error)
                     self.statusBuyLabel.text = error.localizedDescription
@@ -301,7 +302,6 @@ class HomeViewController: UIViewController {
                     let str = String(data: data, encoding: .utf8)
                     print(str ?? "")
                     if let _ = try? JSONDecoder().decode(BuyResponse.self, from: data) {
-                        let type = self.category == .egg ? item.eggType& : item.wormType&
                         self.statusBuyLabel.setHighlight(
                             text: "Đã mua THÀNH CÔNG: \(type.uppercased()), price: \(item.price)",
                             font: .systemFont(ofSize: 18),
@@ -309,8 +309,32 @@ class HomeViewController: UIViewController {
                             highlightText: "\(type.uppercased()), price: \(item.price)",
                             highlightFont: .systemFont(ofSize: 18, weight: .semibold),
                             highlightColor: .systemGreen)
-                        self.buySuccessLabel.text = self.buySuccessLabel.text& + "Đã mua THÀNH CÔNG: \(type.uppercased()), price: \(item.price) \n"
+                        switch RarityType(rawValue: type) {
+                        case .common:
+                            self.countWorm[0] += 1
+                        case .uncommon:
+                            self.countWorm[1] += 1
+                        case .rare:
+                            self.countWorm[2] += 1
+                        case .epic:
+                            self.countWorm[3] += 1
+                        case .legendary:
+                            self.countWorm[4] += 1
+                        case .none:
+                            break
+                        }
+                        self.totalSeedSpent += item.price
+                        self.buySuccessLabel.text = 
+                        "TOTAL SPENT: \(self.totalSeedSpent)\n"
+                        + "- \(self.countWorm[0]) Common\n"
+                        + "- \(self.countWorm[1]) Uncommon\n"
+                        + "- \(self.countWorm[2]) Rare\n"
+                        + "- \(self.countWorm[3]) Epic\n"
+                        + "- \(self.countWorm[4]) Legend"
+                        self.buySuccessLabel.sizeToFit()
+                        self.displayStatus(item: item, isSuccess: true)
                     } else if let error = try? JSONDecoder().decode(ERROR.self, from: data) {
+                        self.displayStatus(item: item, isSuccess: false)
                         self.statusBuyLabel.setHighlight(
                             text: "LỖI: \(error.message&)",
                             font: .systemFont(ofSize: 18),
@@ -319,6 +343,7 @@ class HomeViewController: UIViewController {
                             highlightFont: .systemFont(ofSize: 18, weight: .semibold),
                             highlightColor: .red)
                     } else {
+                        self.displayStatus(item: item, isSuccess: false)
                         self.statusBuyLabel.text = "LỖI KHÔNG XÁC ĐỊNH."
                         self.statusBuyLabel.textColor = .red
                         self.statusBuyLabel.setAttributedText(
@@ -342,52 +367,112 @@ class HomeViewController: UIViewController {
         }
     }
     
-    func getMyItems(complete: @escaping (_ items: [Item]) -> Void) {
-        self.showLoading()
-        let page = pageListTextField.text&
-        let type = typeSegment.selectedSegmentIndex == 0 ? "egg" : "worms"
-        let url = URL(string: "https://elb.seeddao.org/api/v1/\(type)/me?page=\(page)")!
-        
+//    func getMyItems(complete: @escaping (_ items: [Item]) -> Void) {
+//        self.showLoading()
+//        let page = pageListTextField.text&
+//        let type = typeSegment.selectedSegmentIndex == 0 ? "egg" : "worms"
+//        let url = URL(string: "https://elb.seeddao.org/api/v1/\(type)/me?page=\(page)")!
+//        
+//        var request = URLRequest(url: url)
+//        request.allHTTPHeaderFields = ApiUtils.shared.headersBuy
+//        
+//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+//            if let error = error {
+//                print(error)
+//            } else if let data = data {
+//                let str = String(data: data, encoding: .utf8)
+//                print(str ?? "")
+//                decode(data) { (myEgg: ItemResponse) in
+////                    guard let self else { return }
+//                    if let items = myEgg.data?.items {
+//                        complete(items)
+//                    }
+//                }
+//            }
+//        }
+//        
+//        task.resume()
+//    }
+    
+    // Function to fetch data for a specific page
+    func fetchMyListData(forPage page: Int, completion: @escaping (Result<ItemData, Error>) -> Void) {
+//        let type = typeSegment.selectedSegmentIndex == 0 ? "egg" : "worms"
+        let type = "worms"
+        guard let url = URL(string: "https://elb.seeddao.org/api/v1/\(type)/me?page=\(page)") else { return }
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = ApiUtils.shared.headersBuy
-        
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print(error)
-            } else if let data = data {
-                let str = String(data: data, encoding: .utf8)
-                print(str ?? "")
-                decode(data) { (myEgg: ItemResponse) in
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                completion(.failure(NSError(domain: "DataError", code: -1, userInfo: nil)))
+                return
+            }
+            decode(data) { (myEgg: ItemResponse) in
 //                    guard let self else { return }
-                    if let items = myEgg.data?.items {
-                        complete(items)
-                    }
+                if let items = myEgg.data {
+                    completion(.success(items))
                 }
             }
         }
-        
         task.resume()
     }
     
+    // Function to fetch all pages
+    func fetchAllPages(completion: @escaping (Result<[Item], Error>) -> Void) {
+        self.showLoading()
+        var allData = [Item]()
+        var currentPage = 1
+
+        func fetchNextPage() {
+            fetchMyListData(forPage: currentPage) { result in
+                switch result {
+                case .success(let apiResponse):
+                    if let items = apiResponse.items, !items.isEmpty {
+                        allData.append(contentsOf: items)
+                        currentPage += 1
+                        fetchNextPage()
+                    } else {
+                        completion(.success(allData))
+                    }
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+
+        fetchNextPage()
+    }
+    
     func unlist() {
-        getMyItems { [weak self] items in
+        fetchAllPages { [weak self] result in
             guard let self else { return }
-            let marketIDs = items.filter({
-                !$0.marketID&.isEmpty && $0.type == self.rarity?.rawValue
-            }).map { $0.marketID& }
-            self.handleToMarket(marketIDs: marketIDs, isList: false, price: nil)
+            switch result {
+            case .success(let items):
+                let marketIDs = items.filter({
+                    !$0.marketID&.isEmpty && $0.type == self.rarity?.rawValue
+                }).map { $0.marketID& }
+                self.handleToMarket(marketIDs: marketIDs, isList: false, price: nil)
+            case .failure(let error):
+                
+                self.titleSellLabel.text = "BÁN: Unlist Failed - \(error.localizedDescription)"
+            }
+            
         }
     }
     
     func handleToMarket(marketIDs: [String], isList: Bool, price: Double?) {
         if marketIDs.isEmpty {
             DispatchQueue.main.async {
-                self.resultLabel.text = "Không có Item nào để list/unlist!!!"
+                self.titleSellLabel.text = "BÁN: \(isList ? "LIST" : "UNLIST") NOT FOUND"
                 self.hideLoading()
             }
         } else {
             DispatchQueue.main.async {
-                self.resultLabel.text = "Đợi chút nhé. Việc list/unlist cần lần lượt nên hơi lâu..."
+                self.titleSellLabel.text = "BÁN: \(isList ? "LIST" : "UNLIST") IS PROCESSING..."
             }
             self.performSequentialApiCalls(for: marketIDs, isList: isList, price: price)
         }
@@ -396,12 +481,17 @@ class HomeViewController: UIViewController {
     func list() {
         let rarity = self.currentRarity()?.rawValue
         let price = Double(self.priceListTextField.text&)
-        getMyItems { [weak self] items in
+        fetchAllPages { [weak self] result in
             guard let self else { return }
-            let marketIDs = items.filter({
-                $0.marketID&.isEmpty && $0.type == rarity
-            }).map { $0.id& }
-            self.handleToMarket(marketIDs: marketIDs, isList: true, price: price)
+            switch result {
+            case .success(let items):
+                let marketIDs = items.filter({
+                    $0.marketID&.isEmpty && $0.type == rarity
+                }).map { $0.id& }
+                self.handleToMarket(marketIDs: marketIDs, isList: true, price: price)
+            case .failure(let error):
+                self.titleSellLabel.text = "BÁN: Unlist Failed - \(error.localizedDescription)"
+            }
         }
     }
     
@@ -430,7 +520,7 @@ class HomeViewController: UIViewController {
             print("All API calls completed")
             DispatchQueue.main.async {
                 let type = isList ? "List" : "Unlist"
-                self.resultLabel.text = "Đã \(type) XONG!!!"
+                self.titleSellLabel.text = "BÁN: Đã \(type) XONG!!!"
             }
             self.hideLoading()
             return
@@ -517,8 +607,9 @@ class HomeViewController: UIViewController {
     private func getAllMarket() {
         DispatchQueue.main.async {
             self.statusBuyLabel.textColor = .black
-            self.titleResultLabel.text = "Result: ĐANG TÌM...."
             self.currentPage = self.currentPage == 2 ? 1 : 2
+            self.titleResultLabel.text = "Result: ĐANG TÌM.... TRANG \(self.currentPage)"
+         
         }
         
         let type = category == .egg ? "egg" : "worm"
@@ -582,17 +673,12 @@ class HomeViewController: UIViewController {
         var itemNeedBuy: [Item] = []
         
 //        let count = Int(self.countListTextField.text&) ?? 2
-        self.resultLabel.text = ""
         
         let dispatchGroup = DispatchGroup()
         
-        for (index, item) in list.enumerated() {
+        for (index, item) in list.enumerated() where !proccessedBuyQueue.allItems().contains(item.id) {
             let type = category == .egg ? item.eggType&.uppercased() : item.wormType&.uppercased()
             let typeCheck = category == .egg ? item.eggType& : item.wormType&
-            if index < 5 {
-                guard let category else { return }
-                self.resultLabel.text = (self.resultLabel.text&) + "\(category.type): \(type), price: \(item.price)\n"
-            }
             
             switch RarityType(rawValue: typeCheck) {
             case .common:
@@ -631,6 +717,7 @@ class HomeViewController: UIViewController {
             
             dispatchGroup.enter()
             self.buyItem(id: item.id, item: item, isAll: true, complete: {
+                self.proccessedBuyQueue.enqueue(item.id)
                 dispatchGroup.leave()
             })
         }
@@ -641,7 +728,7 @@ class HomeViewController: UIViewController {
             })
             
         } else {
-            self.statusBuyLabel.text = "Không có. Thử lại!!!"
+//            self.statusBuyLabel.text = "Không có. Thử lại!!!"
             recallApiIfAutoALL()
         }
     }
@@ -652,6 +739,17 @@ class HomeViewController: UIViewController {
             delay(time) {
                 self.getAllMarket()
             }
+        }
+    }
+    
+    func displayStatus(item: Item, isSuccess: Bool) {
+        let type = self.category == .egg ? item.eggType& : item.wormType&
+        if isSuccess {
+            successBuyQueue.enqueue("\(type.uppercased()), \(item.price)")
+            self.successLabel.text = "SUCCESS BUY:\n" + successBuyQueue.allItems().joined(separator: "\n")
+        } else {
+            failedBuyQueue.enqueue("\(type.uppercased()), \(item.price)")
+            self.failedLabel.text = "FAILED BUY:\n" + failedBuyQueue.allItems().joined(separator: "\n")
         }
     }
 }

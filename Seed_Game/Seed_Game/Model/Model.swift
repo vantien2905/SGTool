@@ -23,12 +23,12 @@ struct ERROR: Codable {
 
 // MARK: - DataClass
 struct ItemData: Codable {
-//    let total, page, pageSize: Int?
+    let total, page, pageSize: Int?
     let items: [Item]?
 
     enum CodingKeys: String, CodingKey {
-//        case total, page
-//        case pageSize = "page_size"
+        case total, page
+        case pageSize = "page_size"
         case items
     }
 }
@@ -41,11 +41,11 @@ struct Item: Codable {
     let wormType: String?
     let wormID: String?
     let priceGross: Double?
-//    let priceNet, fee: Double?
-//    let status: String?
-//    let createdBy: String?
-//    let boughtBy: JSONNull?
-//    let createdAt, updatedAt: String?
+    let priceNet, fee: Double?
+    let status: String?
+    let createdBy: String?
+    let boughtBy: JSONNull?
+    let createdAt, updatedAt: String?
     let marketID: String?
     var type: String?
 
@@ -56,12 +56,12 @@ struct Item: Codable {
         case wormID = "worm_id"
         case wormType = "worm_type"
         case priceGross = "price_gross"
-//        case priceNet = "price_net"
-//        case fee, status
-//        case createdBy = "created_by"
-//        case boughtBy = "bought_by"
-//        case createdAt = "created_at"
-//        case updatedAt = "updated_at"
+        case priceNet = "price_net"
+        case fee, status
+        case createdBy = "created_by"
+        case boughtBy = "bought_by"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
         case marketID = "market_id"
         case type
     }

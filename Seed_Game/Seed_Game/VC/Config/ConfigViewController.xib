@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -28,23 +28,27 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="xfR-wB-2U3">
-                    <rect key="frame" x="16" y="663" width="361" height="139"/>
+                    <rect key="frame" x="16" y="538" width="361" height="264"/>
                     <subviews>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Token get list" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="V5P-Zm-7Gj">
-                            <rect key="frame" x="0.0" y="0.0" width="361" height="38.333333333333336"/>
+                            <rect key="frame" x="0.0" y="0.0" width="361" height="80"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="80" id="uit-KI-CQf"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Token buy" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="CoZ-a7-UiU">
-                            <rect key="frame" x="0.0" y="50.333333333333371" width="361" height="38.333333333333343"/>
+                            <rect key="frame" x="0.0" y="92" width="361" height="80"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
                         </textField>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="gcW-bl-FfH">
-                            <rect key="frame" x="0.0" y="100.66666666666663" width="361" height="38.333333333333343"/>
+                            <rect key="frame" x="0.0" y="184" width="361" height="80"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XDL-NG-QkZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="38.333333333333336"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="80"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                     <state key="normal" title="Bỏ qua"/>
                                     <connections>
@@ -52,9 +56,13 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpY-VW-cxL">
-                                    <rect key="frame" x="186.66666666666663" y="0.0" width="174.33333333333337" height="38.333333333333336"/>
-                                    <state key="normal" title="Button"/>
-                                    <buttonConfiguration key="configuration" style="plain" title="Lưu"/>
+                                    <rect key="frame" x="186.66666666666663" y="0.0" width="174.33333333333337" height="80"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Lưu"/>
+                                    <buttonConfiguration key="configuration" style="plain" title="Lưu">
+                                        <fontDescription key="titleFontDescription" type="system" pointSize="20"/>
+                                    </buttonConfiguration>
                                     <connections>
                                         <action selector="save" destination="-1" eventType="touchUpInside" id="3ur-HJ-d6S"/>
                                     </connections>
@@ -68,7 +76,6 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="xfR-wB-2U3" secondAttribute="bottom" constant="16" id="5Yw-Ln-ZLY"/>
-                <constraint firstItem="xfR-wB-2U3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="IBc-6b-as8"/>
                 <constraint firstItem="Zgk-is-2bh" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="31" id="obV-OS-fFL"/>
                 <constraint firstItem="xfR-wB-2U3" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="qVo-Se-ObO"/>
                 <constraint firstItem="Zgk-is-2bh" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="wZB-AF-s9S"/>

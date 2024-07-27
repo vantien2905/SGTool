@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		409B0F471ADD54C9E9A43F3C /* Pods_Seed_Game.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 392DF97EA037CC13AF05AD15 /* Pods_Seed_Game.framework */; };
+		D47DCD0B2C52A46100704C9B /* LimitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47DCD0A2C52A46100704C9B /* LimitQueue.swift */; };
 		DF49C6002C480CDF00BFE125 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF49C5FF2C480CDF00BFE125 /* String+.swift */; };
 		DF49C6062C480E1200BFE125 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF49C6042C480E1200BFE125 /* HomeViewController.swift */; };
 		DF49C6072C480E1200BFE125 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DF49C6052C480E1200BFE125 /* HomeViewController.xib */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		392DF97EA037CC13AF05AD15 /* Pods_Seed_Game.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Seed_Game.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		746821D6CAFF51A1C05087E8 /* Pods-Seed_Game.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Seed_Game.debug.xcconfig"; path = "Target Support Files/Pods-Seed_Game/Pods-Seed_Game.debug.xcconfig"; sourceTree = "<group>"; };
+		D47DCD0A2C52A46100704C9B /* LimitQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitQueue.swift; sourceTree = "<group>"; };
 		DC32E4F220698F244D3C44B3 /* Pods-Seed_Game.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Seed_Game.release.xcconfig"; path = "Target Support Files/Pods-Seed_Game/Pods-Seed_Game.release.xcconfig"; sourceTree = "<group>"; };
 		DF49C5FF2C480CDF00BFE125 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		DF49C6042C480E1200BFE125 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				DF686E982C43708400863490 /* UIView+.swift */,
 				DF49C5FF2C480CDF00BFE125 /* String+.swift */,
 				DFFA2AD52C4D533C00F873A9 /* UILabel+.swift */,
+				D47DCD0A2C52A46100704C9B /* LimitQueue.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				DFC9412B2C423B490000AED7 /* Model.swift in Sources */,
 				DFCCFEF12C42991300585B53 /* Enum+.swift in Sources */,
 				DF686E952C42EDAE00863490 /* UIViewController+.swift in Sources */,
+				D47DCD0B2C52A46100704C9B /* LimitQueue.swift in Sources */,
 				DF686E932C42EBAA00863490 /* ConfigViewController.swift in Sources */,
 				DF6B31D52C48154C00DED035 /* HomeViewModel.swift in Sources */,
 				DF686E992C43708400863490 /* UIView+.swift in Sources */,
@@ -441,7 +445,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 84BA83S8FS;
+				DEVELOPMENT_TEAM = 86W575R6MC;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Seed_Game/Info.plist;
@@ -457,7 +461,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "tien.demo.vn.Seed-Game.4";
+				PRODUCT_BUNDLE_IDENTIFIER = "tien.demo.vn.Seed-Game.41";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

@@ -179,7 +179,7 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="TYX-bC-682">
-                    <rect key="frame" x="16" y="599.66666666666663" width="361" height="100"/>
+                    <rect key="frame" x="16" y="598" width="361" height="100"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="OsY-sN-UJI">
                             <rect key="frame" x="0.0" y="0.0" width="361" height="40"/>
@@ -232,7 +232,7 @@
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Ljx-0C-Wdo">
-                    <rect key="frame" x="16" y="723.66666666666663" width="361" height="82.333333333333371"/>
+                    <rect key="frame" x="16" y="722" width="361" height="84"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="gg4-yH-VFz">
                             <rect key="frame" x="0.0" y="0.0" width="361" height="24"/>
@@ -251,21 +251,21 @@
                                 </activityIndicatorView>
                             </subviews>
                         </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="msd-xu-pER">
-                            <rect key="frame" x="0.0" y="44" width="361" height="38.333333333333343"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="msd-xu-pER">
+                            <rect key="frame" x="0.0" y="44" width="361" height="40"/>
                             <subviews>
                                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nhập giá bán" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HLW-fb-C5Z">
-                                    <rect key="frame" x="0.0" y="0.0" width="81.333333333333329" height="38.333333333333336"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="65.666666666666671" height="40"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Số lượng" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tYM-IL-Duv">
-                                    <rect key="frame" x="93.333333333333343" y="0.0" width="81.333333333333343" height="38.333333333333336"/>
+                                    <rect key="frame" x="73.666666666666671" y="0.0" width="66.000000000000014" height="40"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObG-5A-KLI">
-                                    <rect key="frame" x="186.66666666666666" y="0.0" width="80.999999999999972" height="38.333333333333336"/>
+                                    <rect key="frame" x="147.66666666666666" y="0.0" width="65.666666666666657" height="40"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="List"/>
                                     <userDefinedRuntimeAttributes>
@@ -284,7 +284,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tjn-sl-JKP">
-                                    <rect key="frame" x="279.66666666666669" y="0.0" width="81.333333333333314" height="38.333333333333336"/>
+                                    <rect key="frame" x="221.33333333333334" y="0.0" width="66.000000000000028" height="40"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="Unlist"/>
                                     <userDefinedRuntimeAttributes>
@@ -302,7 +302,29 @@
                                         <action selector="unlistButtonTapped" destination="-1" eventType="touchUpInside" id="IIC-um-Ww2"/>
                                     </connections>
                                 </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Beg-vP-1NN" userLabel="Làm giá Beta">
+                                    <rect key="frame" x="295.33333333333331" y="0.0" width="65.666666666666686" height="40"/>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain" title="BETA"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                            <real key="value" value="1"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                            <color key="value" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                            <real key="value" value="4"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="makePrice:" destination="-1" eventType="touchUpInside" id="qJ1-Iw-vt7"/>
+                                    </connections>
+                                </button>
                             </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="VNS-cW-9dP"/>
+                            </constraints>
                         </stackView>
                     </subviews>
                 </stackView>

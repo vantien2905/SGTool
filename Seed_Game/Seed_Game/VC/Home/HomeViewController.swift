@@ -45,6 +45,7 @@ class HomeViewController: UIViewController {
     let proccessedBuyQueue = LimitedQueue<String>(maxSize: 10)
     var totalSeedSpent: Double = 0
     var countWorm: [Int] = [0, 0, 0, 0, 0]
+    var isBetaRun: Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         priceBuytextField.text = "29"
@@ -124,6 +125,7 @@ class HomeViewController: UIViewController {
         getAllMarket()
         self.totalSeedSpent = 0
         self.countWorm = [0, 0, 0, 0, 0]
+        self.buySuccessLabel.text = ""
     }
     
     @IBAction func configTapped() {
@@ -131,46 +133,90 @@ class HomeViewController: UIViewController {
         self.presentVC(vc)
     }
     
+    @IBAction func makePrice(_ sender: Any) {
+        isBetaRun.toggle()
+        makePriceHelper()
+    }
+    
+    func makePriceHelper() {
+        if isBetaRun {
+            DispatchQueue.main.async {
+                self.titleSellLabel.text = "BETA: ĐANG BÁN"
+            }
+            list { result in
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        self.titleSellLabel.text = "BETA: ĐỢI 45s"
+                    }
+                    
+                    delay(45) {
+                        DispatchQueue.main.async {
+                            self.titleSellLabel.text = "BETA: ĐANG GỠ BÁN"
+                        }
+                        self.unlist { subRes in
+                            switch subRes {
+                            case .success:
+                                self.makePriceHelper()
+                            case .failure:
+                                self.titleSellLabel.text = "CÓ LỖI KHI GỠ"
+                                break
+                            }
+                        }
+                    }
+                case .failure:
+                    self.titleSellLabel.text = "CÓ LỖI KHI GỠ"
+                    break
+                }
+            }
+        }
+    }
     @IBAction func unlistButtonTapped() {
-        unlist()
+        if isBetaRun {
+            self.titleSellLabel.text = "ĐANG LÀM GIÁ"
+        } else {
+            unlist { _ in }
+        }
     }
     
     @IBAction func listButtonTapped() {
-        
-        let type = (category?.type ?? "").uppercased()
-        let rare = (rarity?.rawValue ?? "").uppercased()
-        guard let doublePrice = Double(priceListTextField.text&) else { return }
-        var price: String
-        if category == .egg {
-            price = "\(Int(doublePrice.rounded()))"
+        if isBetaRun {
+            self.titleSellLabel.text = "ĐANG LÀM GIÁ"
         } else {
-            price = "\(doublePrice)"
-        }
-        let count = countListTextField.text&
-        let message = "Có chắc muốn bán \n\n\(count) (\(type) - \(rare))\n\n với giá [\(price) SEED]?\n"
-        
-        SwiftAlertView.show(title: "Xác nhận",
-                            message: message,
-                            buttonTitles: "Đồng ý", "KHÔNG") {
-            $0.style = .light
-            
-            let attributedString = NSMutableAttributedString(string: message)
-            let rangeCount = (message as NSString).range(of: "\(count) (\(type) - \(rare))")
-            attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .semibold), range: rangeCount)
-            attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: rangeCount)
-            
-            let rangePrice = (message as NSString).range(of: "[\(price) SEED]")
-            attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .semibold), range: rangePrice)
-            attributedString.addAttribute(.foregroundColor, value: UIColor.systemGreen, range: rangePrice)
-            $0.messageLabel.attributedText = attributedString
-        }
-        .onButtonClicked { _, buttonIndex in
-            print("Button Clicked At Index \(buttonIndex)")
-            if buttonIndex == 0 {
-                self.list()
+            let type = (category?.type ?? "").uppercased()
+            let rare = (rarity?.rawValue ?? "").uppercased()
+            guard let doublePrice = Double(priceListTextField.text&) else { return }
+            var price: String
+            if category == .egg {
+                price = "\(Int(doublePrice.rounded()))"
+            } else {
+                price = "\(doublePrice)"
             }
+            let count = countListTextField.text&
+            let message = "Có chắc muốn bán \n\n\(count) (\(type) - \(rare))\n\n với giá [\(price) SEED]?\n"
+            
+            SwiftAlertView.show(title: "Xác nhận",
+                                message: message,
+                                buttonTitles: "Đồng ý", "KHÔNG") {
+                $0.style = .light
+                
+                let attributedString = NSMutableAttributedString(string: message)
+                let rangeCount = (message as NSString).range(of: "\(count) (\(type) - \(rare))")
+                attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .semibold), range: rangeCount)
+                attributedString.addAttribute(.foregroundColor, value: UIColor.red, range: rangeCount)
+                
+                let rangePrice = (message as NSString).range(of: "[\(price) SEED]")
+                attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 15, weight: .semibold), range: rangePrice)
+                attributedString.addAttribute(.foregroundColor, value: UIColor.systemGreen, range: rangePrice)
+                $0.messageLabel.attributedText = attributedString
+            }
+                                .onButtonClicked { _, buttonIndex in
+                                    print("Button Clicked At Index \(buttonIndex)")
+                                    if buttonIndex == 0 {
+                                        self.list { _ in }
+                                    }
+                                }
         }
-        
     }
     
     var currentDataTask: URLSessionDataTask?
@@ -447,7 +493,7 @@ class HomeViewController: UIViewController {
         fetchNextPage()
     }
     
-    func unlist() {
+    func unlist(completion: @escaping (Result<Void, Error>) -> Void) {
         fetchAllPages { [weak self] result in
             guard let self else { return }
             switch result {
@@ -455,43 +501,56 @@ class HomeViewController: UIViewController {
                 let marketIDs = items.filter({
                     !$0.marketID&.isEmpty && $0.type == self.rarity?.rawValue
                 }).map { $0.marketID& }
-                self.handleToMarket(marketIDs: marketIDs, isList: false, price: nil)
+                self.handleToMarket(marketIDs: marketIDs, isList: false, price: nil, completion: completion)
             case .failure(let error):
-                
                 self.titleSellLabel.text = "BÁN: Unlist Failed - \(error.localizedDescription)"
+                completion(.failure(error))
             }
             
         }
     }
     
-    func handleToMarket(marketIDs: [String], isList: Bool, price: Double?) {
+    func handleToMarket(marketIDs: [String],
+                        isList: Bool,
+                        price: Double?,
+                        completion: @escaping (Result<Void, Error>) -> Void) {
         if marketIDs.isEmpty {
             DispatchQueue.main.async {
                 self.titleSellLabel.text = "BÁN: \(isList ? "LIST" : "UNLIST") NOT FOUND"
                 self.hideLoading()
+                let error = NSError(domain: "NOT FOUND", code: 404)
+                completion(.failure(error))
             }
         } else {
             DispatchQueue.main.async {
                 self.titleSellLabel.text = "BÁN: \(isList ? "LIST" : "UNLIST") IS PROCESSING..."
             }
-            self.performSequentialApiCalls(for: marketIDs, isList: isList, price: price)
+            self.performSequentialApiCalls(for: marketIDs, isList: isList, price: price, completion: completion)
         }
     }
     
-    func list() {
+    func list(completion: @escaping (Result<Void, Error>) -> Void) {
         let rarity = self.currentRarity()?.rawValue
-        let price = Double(self.priceListTextField.text&)
-        fetchAllPages { [weak self] result in
-            guard let self else { return }
-            switch result {
-            case .success(let items):
-                let marketIDs = items.filter({
-                    $0.marketID&.isEmpty && $0.type == rarity
-                }).map { $0.id& }
-                self.handleToMarket(marketIDs: marketIDs, isList: true, price: price)
-            case .failure(let error):
-                self.titleSellLabel.text = "BÁN: Unlist Failed - \(error.localizedDescription)"
+        if var price = Double(self.priceListTextField.text&) {
+            fetchAllPages { [weak self] result in
+                guard let self else { return }
+                switch result {
+                case .success(let items):
+                    let marketIDs = items.filter({
+                        $0.marketID&.isEmpty && $0.type == rarity
+                    }).map { $0.id& }
+                    var randomPrice = Int.random(in: 99..<101)
+                    if isBetaRun {
+                        price = price * Double(randomPrice) / 100
+                    }
+                    self.handleToMarket(marketIDs: marketIDs, isList: true, price: price, completion: completion)
+                case .failure(let error):
+                    self.titleSellLabel.text = "BÁN: Unlist Failed - \(error.localizedDescription)"
+                    completion(.failure(error))
+                }
             }
+        } else {
+            completion(.failure(NSError(domain: "NULL PRICE", code: 404)))
         }
     }
     
@@ -514,7 +573,11 @@ class HomeViewController: UIViewController {
     }
     
     // Function to handle the sequence of API calls in a loop
-    func performSequentialApiCalls(for marketIds: [String], isList: Bool, price: Double?, currentIndex: Int = 0) {
+    func performSequentialApiCalls(for marketIds: [String], 
+                                   isList: Bool,
+                                   price: Double?,
+                                   currentIndex: Int = 0,
+                                   completion: @escaping (Result<Void, Error>) -> Void) {
         let count = (Int(countListTextField.text&) ?? 2) - 1
         if currentIndex >= marketIds.count || (currentIndex > count && isList) {
             print("All API calls completed")
@@ -523,6 +586,7 @@ class HomeViewController: UIViewController {
                 self.titleSellLabel.text = "BÁN: Đã \(type) XONG!!!"
             }
             self.hideLoading()
+            completion(.success(()))
             return
         }
         
@@ -531,11 +595,11 @@ class HomeViewController: UIViewController {
         if isList {
             guard let doublePrice = price else { return }
             listOnMarket(id: currentMarketId, doublePrice: doublePrice) {
-                self.performSequentialApiCalls(for: marketIds, isList: isList, price: doublePrice, currentIndex: currentIndex + 1)
+                self.performSequentialApiCalls(for: marketIds, isList: isList, price: doublePrice, currentIndex: currentIndex + 1, completion: completion)
             }
         } else {
             removeOnMarket(id: currentMarketId) {
-                self.performSequentialApiCalls(for: marketIds, isList: isList, price: nil, currentIndex: currentIndex + 1)
+                self.performSequentialApiCalls(for: marketIds, isList: isList, price: nil, currentIndex: currentIndex + 1, completion: completion)
             }
         }
         

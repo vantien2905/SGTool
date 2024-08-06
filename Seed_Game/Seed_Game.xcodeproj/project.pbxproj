@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		409B0F471ADD54C9E9A43F3C /* Pods_Seed_Game.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 392DF97EA037CC13AF05AD15 /* Pods_Seed_Game.framework */; };
 		D47DCD0B2C52A46100704C9B /* LimitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47DCD0A2C52A46100704C9B /* LimitQueue.swift */; };
+		D4E2B8542C61232900B67218 /* PriceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E2B8532C61232900B67218 /* PriceModel.swift */; };
 		DF49C6002C480CDF00BFE125 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF49C5FF2C480CDF00BFE125 /* String+.swift */; };
 		DF49C6062C480E1200BFE125 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF49C6042C480E1200BFE125 /* HomeViewController.swift */; };
 		DF49C6072C480E1200BFE125 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DF49C6052C480E1200BFE125 /* HomeViewController.xib */; };
@@ -33,6 +34,7 @@
 		392DF97EA037CC13AF05AD15 /* Pods_Seed_Game.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Seed_Game.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		746821D6CAFF51A1C05087E8 /* Pods-Seed_Game.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Seed_Game.debug.xcconfig"; path = "Target Support Files/Pods-Seed_Game/Pods-Seed_Game.debug.xcconfig"; sourceTree = "<group>"; };
 		D47DCD0A2C52A46100704C9B /* LimitQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitQueue.swift; sourceTree = "<group>"; };
+		D4E2B8532C61232900B67218 /* PriceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceModel.swift; sourceTree = "<group>"; };
 		DC32E4F220698F244D3C44B3 /* Pods-Seed_Game.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Seed_Game.release.xcconfig"; path = "Target Support Files/Pods-Seed_Game/Pods-Seed_Game.release.xcconfig"; sourceTree = "<group>"; };
 		DF49C5FF2C480CDF00BFE125 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		DF49C6042C480E1200BFE125 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				DFC9412A2C423B480000AED7 /* Model.swift */,
+				D4E2B8532C61232900B67218 /* PriceModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				DF49C6002C480CDF00BFE125 /* String+.swift in Sources */,
 				DFCCFEEF2C428BA400585B53 /* ApiUtils.swift in Sources */,
 				DF686E972C436EF700863490 /* AppConfig.swift in Sources */,
+				D4E2B8542C61232900B67218 /* PriceModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

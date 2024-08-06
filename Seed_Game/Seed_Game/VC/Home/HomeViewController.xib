@@ -13,24 +13,15 @@
             <connections>
                 <outlet property="autoSwitch" destination="D4G-kT-NTH" id="prA-9W-IPV"/>
                 <outlet property="buySuccessLabel" destination="KQ1-IM-qf4" id="mQK-X7-Uib"/>
-                <outlet property="commonTextField" destination="dxT-mh-eb6" id="KPU-Zc-mWc"/>
                 <outlet property="countListTextField" destination="tYM-IL-Duv" id="anU-Z2-wyM"/>
-                <outlet property="epicTextField" destination="OGQ-IS-ic5" id="8Jj-Aw-c6Q"/>
                 <outlet property="failedLabel" destination="kQ9-Du-rUj" id="9X5-js-8sp"/>
-                <outlet property="legendTextField" destination="FRh-PA-STu" id="64I-qS-o2x"/>
                 <outlet property="loadingView" destination="XkB-Xz-59I" id="KjJ-sH-4yf"/>
-                <outlet property="priceBuytextField" destination="9xa-4v-HMN" id="X11-hF-uOR"/>
-                <outlet property="priceListTextField" destination="HLW-fb-C5Z" id="uDh-qA-LIu"/>
-                <outlet property="rareTextField" destination="dQe-2P-KHJ" id="and-Dv-Muj"/>
-                <outlet property="raritySegment" destination="v1I-6g-T3z" id="sfA-Bp-XAw"/>
                 <outlet property="removeAllEggButton" destination="Tjn-sl-JKP" id="gJZ-8U-UgK"/>
                 <outlet property="statusBuyLabel" destination="YL6-Qb-UaP" id="618-dR-znj"/>
                 <outlet property="successLabel" destination="Nn7-lJ-sDZ" id="8SS-N0-8ih"/>
-                <outlet property="timeTextField" destination="tVG-cb-NBB" id="AmT-tt-uq6"/>
                 <outlet property="titleResultLabel" destination="8VC-VP-mk9" id="fGI-hZ-Ncx"/>
                 <outlet property="titleSellLabel" destination="Ut2-El-eYM" id="a70-ye-vi6"/>
                 <outlet property="typeSegment" destination="XBF-oy-O9k" id="jp7-Bz-heO"/>
-                <outlet property="uncommonTextField" destination="uEn-sp-LMx" id="adX-Dt-DAw"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -40,7 +31,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xZi-pl-p2c">
-                    <rect key="frame" x="16" y="79" width="361" height="408"/>
+                    <rect key="frame" x="16" y="79" width="361" height="297"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="qha-Xb-QCf">
                             <rect key="frame" x="0.0" y="0.0" width="361" height="44"/>
@@ -48,8 +39,9 @@
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XBF-oy-O9k">
                                     <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="45"/>
                                     <segments>
-                                        <segment title="Es"/>
-                                        <segment title="Ws"/>
+                                        <segment title="All"/>
+                                        <segment title="Egg"/>
+                                        <segment title="Worm"/>
                                     </segments>
                                 </segmentedControl>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4GJ-3A-riC">
@@ -77,34 +69,29 @@
                             </constraints>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="WQx-30-MBK">
-                            <rect key="frame" x="0.0" y="54" width="361" height="155"/>
+                            <rect key="frame" x="0.0" y="54" width="361" height="44"/>
                             <subviews>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="v1I-6g-T3z">
-                                    <rect key="frame" x="0.0" y="0.0" width="361" height="32"/>
-                                    <segments>
-                                        <segment title="cm"/>
-                                        <segment title="ucm"/>
-                                        <segment title="Ra"/>
-                                        <segment title="Ep"/>
-                                        <segment title="Lg"/>
-                                    </segments>
-                                </segmentedControl>
                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="KXm-Al-r4V">
-                                    <rect key="frame" x="0.0" y="51" width="361" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="361" height="44"/>
                                     <subviews>
-                                        <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="price target" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9xa-4v-HMN">
-                                            <rect key="frame" x="0.0" y="0.0" width="217" height="44"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                        </textField>
-                                        <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="time" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tVG-cb-NBB">
-                                            <rect key="frame" x="229" y="0.0" width="80" height="44"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="80" id="EBK-6k-40I"/>
-                                            </constraints>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                        </textField>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DkA-2R-DRQ" userLabel="Lucky ALL  ^^">
+                                            <rect key="frame" x="0.0" y="0.0" width="252.66666666666666" height="44"/>
+                                            <color key="backgroundColor" systemColor="systemTealColor"/>
+                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            <state key="normal" title="Lucky ALL ^^">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="luckyAllButtonTapped" destination="-1" eventType="touchUpInside" id="bGP-Gq-F6O"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Auto: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kaB-Fk-tBs" userLabel="Auto:">
+                                            <rect key="frame" x="264.66666666666669" y="0.0" width="44.333333333333314" height="44"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D4G-kT-NTH">
                                             <rect key="frame" x="321" y="0.0" width="42" height="44"/>
                                             <constraints>
@@ -119,31 +106,16 @@
                                         <constraint firstAttribute="height" constant="44" id="N2X-gA-ozh"/>
                                     </constraints>
                                 </stackView>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WgL-ii-JpE">
-                                    <rect key="frame" x="0.0" y="115" width="361" height="40"/>
-                                    <color key="backgroundColor" systemColor="systemTealColor"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="40" id="1WI-lf-jxW"/>
-                                    </constraints>
-                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                    <state key="normal" title="Lucky  ^^">
-                                        <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="luckyButtonTapped" destination="-1" eventType="touchUpInside" id="AQh-mn-VU9"/>
-                                    </connections>
-                                </button>
                             </subviews>
                         </stackView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Results: " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8VC-VP-mk9" userLabel="result">
-                            <rect key="frame" x="0.0" y="219" width="361" height="17"/>
+                            <rect key="frame" x="0.0" y="108" width="361" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="TdG-A1-G5y">
-                            <rect key="frame" x="0.0" y="246" width="361" height="100"/>
+                            <rect key="frame" x="0.0" y="135" width="361" height="100"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="FAILED BUY" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQ9-Du-rUj">
                                     <rect key="frame" x="0.0" y="0.0" width="180.66666666666666" height="100"/>
@@ -165,70 +137,17 @@
                             </constraints>
                         </stackView>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YL6-Qb-UaP">
-                            <rect key="frame" x="0.0" y="356" width="361" height="21.666666666666686"/>
+                            <rect key="frame" x="0.0" y="245" width="361" height="21.666666666666686"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BUY SUCCESS:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KQ1-IM-qf4">
-                            <rect key="frame" x="0.0" y="387.66666666666669" width="361" height="20.333333333333314"/>
+                            <rect key="frame" x="0.0" y="276.66666666666669" width="361" height="20.333333333333314"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                    </subviews>
-                </stackView>
-                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="TYX-bC-682">
-                    <rect key="frame" x="16" y="598" width="361" height="100"/>
-                    <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="OsY-sN-UJI">
-                            <rect key="frame" x="0.0" y="0.0" width="361" height="40"/>
-                            <subviews>
-                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dxT-mh-eb6">
-                                    <rect key="frame" x="0.0" y="0.0" width="62.666666666666664" height="40"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                </textField>
-                                <textField opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="uncom" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uEn-sp-LMx">
-                                    <rect key="frame" x="74.666666666666671" y="0.0" width="62.666666666666671" height="40"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                </textField>
-                                <textField opaque="NO" tag="2" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="rare" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dQe-2P-KHJ">
-                                    <rect key="frame" x="149.33333333333334" y="0.0" width="62.333333333333343" height="40"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                </textField>
-                                <textField opaque="NO" tag="3" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="epic" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OGQ-IS-ic5">
-                                    <rect key="frame" x="223.66666666666666" y="0.0" width="62.666666666666657" height="40"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                </textField>
-                                <textField opaque="NO" tag="4" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="legend" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FRh-PA-STu">
-                                    <rect key="frame" x="298.33333333333331" y="0.0" width="62.666666666666686" height="40"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
-                                </textField>
-                            </subviews>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="40" id="G9U-Lj-KSc"/>
-                            </constraints>
-                        </stackView>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DkA-2R-DRQ" userLabel="Lucky ALL  ^^">
-                            <rect key="frame" x="0.0" y="60" width="361" height="40"/>
-                            <color key="backgroundColor" systemColor="systemTealColor"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="40" id="RmO-pn-bXR"/>
-                            </constraints>
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                            <state key="normal" title="Lucky ALL ^^">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </state>
-                            <connections>
-                                <action selector="luckyAllButtonTapped" destination="-1" eventType="touchUpInside" id="bGP-Gq-F6O"/>
-                            </connections>
-                        </button>
                     </subviews>
                 </stackView>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Ljx-0C-Wdo">
@@ -254,18 +173,13 @@
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="msd-xu-pER">
                             <rect key="frame" x="0.0" y="44" width="361" height="40"/>
                             <subviews>
-                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nhập giá bán" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HLW-fb-C5Z">
-                                    <rect key="frame" x="0.0" y="0.0" width="65.666666666666671" height="40"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
-                                </textField>
                                 <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Số lượng" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tYM-IL-Duv">
-                                    <rect key="frame" x="73.666666666666671" y="0.0" width="66.000000000000014" height="40"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="84.333333333333329" height="40"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits"/>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObG-5A-KLI">
-                                    <rect key="frame" x="147.66666666666666" y="0.0" width="65.666666666666657" height="40"/>
+                                    <rect key="frame" x="92.333333333333343" y="0.0" width="84.333333333333343" height="40"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="List"/>
                                     <userDefinedRuntimeAttributes>
@@ -284,7 +198,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tjn-sl-JKP">
-                                    <rect key="frame" x="221.33333333333334" y="0.0" width="66.000000000000028" height="40"/>
+                                    <rect key="frame" x="184.66666666666666" y="0.0" width="83.999999999999972" height="40"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="Unlist"/>
                                     <userDefinedRuntimeAttributes>
@@ -303,7 +217,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Beg-vP-1NN" userLabel="Làm giá Beta">
-                                    <rect key="frame" x="295.33333333333331" y="0.0" width="65.666666666666686" height="40"/>
+                                    <rect key="frame" x="276.66666666666669" y="0.0" width="84.333333333333314" height="40"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title="BETA"/>
                                     <userDefinedRuntimeAttributes>
@@ -333,12 +247,8 @@
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="xZi-pl-p2c" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="FZp-pd-T2r"/>
-                <constraint firstItem="Ljx-0C-Wdo" firstAttribute="top" secondItem="TYX-bC-682" secondAttribute="bottom" constant="24" id="GOn-bJ-keu"/>
                 <constraint firstItem="xZi-pl-p2c" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" constant="-16" id="L7N-Li-gPe"/>
                 <constraint firstItem="xZi-pl-p2c" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="Qyn-nR-rdW"/>
-                <constraint firstItem="TYX-bC-682" firstAttribute="top" relation="greaterThanOrEqual" secondItem="xZi-pl-p2c" secondAttribute="bottom" constant="10" id="a2w-qO-8Fs"/>
-                <constraint firstItem="TYX-bC-682" firstAttribute="leading" secondItem="Ljx-0C-Wdo" secondAttribute="leading" id="aDf-dj-R56"/>
-                <constraint firstItem="TYX-bC-682" firstAttribute="trailing" secondItem="Ljx-0C-Wdo" secondAttribute="trailing" id="iCi-f2-feb"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Ljx-0C-Wdo" secondAttribute="trailing" constant="16" id="k3K-2Y-TbZ"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="leading" secondItem="Ljx-0C-Wdo" secondAttribute="leading" constant="-16" id="mVb-lO-ueS"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Ljx-0C-Wdo" secondAttribute="bottom" constant="12" id="mYb-7s-hSU"/>

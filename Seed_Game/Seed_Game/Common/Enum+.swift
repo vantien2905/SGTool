@@ -13,42 +13,41 @@ enum EggStatus: String, Codable {
     case onMarket = "on-market"
 }
 
-enum Category: Int {
+enum Category: String {
     case egg
     case worm
     
-    var type: String {
+    func getName() -> String {
         switch self {
         case .egg:
-            return "egg"
+            return "TRỨNG"
+        case .worm:
+            return "SÂU"
+        }
+    }
+    
+    func getTypeParam() -> String {
+        switch self {
+        case .egg:
+            return  "egg"
+        case .worm:
+            return "worms"
+        }
+    }
+    func getMarketType() -> String {
+        switch self {
+        case .egg:
+            return  "egg"
         case .worm:
             return "worm"
         }
     }
-}
-
-enum Rarity: Int, Codable {
-    case common
-    case uncommon
-    case rare
-    case epic
-    case legendary
     
-    var type: RarityType {
-        switch self {
-        case .common:
-            return .common
-        case .uncommon:
-            return .uncommon
-        case .rare:
-            return .rare
-        case .epic:
-            return .epic
-        case .legendary:
-            return .legendary
-        }
+    func getKeyID() -> String {
+        return self == .worm ? "worm_id" : "egg_id"
     }
 }
+
 
 enum RarityType: String {
     case common
@@ -56,6 +55,21 @@ enum RarityType: String {
     case rare
     case epic
     case legendary
+    
+    func getDisplayString() -> String {
+        switch self {
+        case .common:
+            return "CO"
+        case .uncommon:
+            return "UN"
+        case .rare:
+            return "RA"
+        case .epic:
+            return "EP"
+        case .legendary:
+            return "LG"
+        }
+    }
 }
 
 enum MarketType: String {

@@ -71,6 +71,22 @@ struct Item: Codable {
             return (priceGross ?? 0) / coefficient
         }
     }
+    
+    func getType() -> RarityType? {
+        if let wormType = wormType, !wormType.isEmpty {
+            return RarityType(rawValue: wormType)
+        }
+        if let eggType, !eggType.isEmpty {
+            return RarityType(rawValue: eggType)
+        }
+        return nil
+    }
+    func getCategory() -> Category {
+        if eggID&.isEmpty {
+            return .worm
+        }
+        return .egg
+    }
 }
 
 enum Status: String, Codable {

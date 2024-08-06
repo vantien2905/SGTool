@@ -91,6 +91,7 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func makePrice(_ sender: Any) {
+        self.view.endEditing(true)
         isBetaRun.toggle()
         makePriceHelper()
     }
@@ -126,6 +127,7 @@ class HomeViewController: UIViewController {
         }
     }
     @IBAction func unlistButtonTapped() {
+        self.view.endEditing(true)
         if isBetaRun {
             self.titleSellLabel.text = "ĐANG LÀM GIÁ"
         } else {
@@ -136,6 +138,7 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func listButtonTapped() {
+        self.view.endEditing(true)
         if isBetaRun {
             self.titleSellLabel.text = "ĐANG LÀM GIÁ"
         } else {
@@ -283,10 +286,19 @@ class HomeViewController: UIViewController {
                 completion(.failure(NSError(domain: "DataError", code: -1, userInfo: nil)))
                 return
             }
-            decode(data) { (myEgg: ItemResponse) in
-//                    guard let self else { return }
-                if let items = myEgg.data {
-                    completion(.success(items))
+
+            if let marketResponse = try? JSONDecoder().decode(ItemResponse.self, from: data),
+                let dataValue = marketResponse.data {
+                completion(.success(dataValue))
+            } else if let error = try? JSONDecoder().decode(ERROR.self, from: data) {
+                DispatchQueue.main.async {
+                    self.titleSellLabel.text = "LỖI: \(error.message ?? "")"
+                    self.titleSellLabel.textColor = .red
+                    if error.message == "telegram data expired" {
+                        self.isBetaRun = false
+                    } else {
+                        completion(.failure(NSError(domain: error.message&, code: error.code?.toInt ?? -1)))
+                    }
                 }
             }
         }

@@ -710,8 +710,9 @@ class HomeViewController: UIViewController {
             
             func callAPiBuy(item: Item, category: Category) {
                 itemNeedBuy.append(item)
-                self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(category.getName().uppercased()), price: \(item.price) \n"
-                
+                DispatchQueue.main.async {
+                    self.statusBuyLabel.text = "\(self.statusBuyLabel.text&)\n" + "Type: \(category.getName().uppercased()), price: \(item.price) \n"
+                }
                 dispatchGroup.enter()
                 self.buyItem(id: item.id, item: item, complete: {
                     self.proccessedBuyQueue.enqueue(item.id)

@@ -46,7 +46,7 @@ struct Item: Codable {
     let createdBy: String?
     let boughtBy: JSONNull?
     let createdAt, updatedAt: String?
-    let marketID: String?
+    var marketID: String?
     var type: String?
 
     enum CodingKeys: String, CodingKey {

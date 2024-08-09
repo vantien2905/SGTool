@@ -456,13 +456,13 @@ class HomeViewController: UIViewController {
             guard let self else { return }
             switch result {
             case .success(let items):
-                
+                var itemsList = items
                 var currentItemIndex = 0
                 relistNextItem()
                 
                 func relistNextItem() {
-                    if currentItemIndex < items.count {
-                        let item = items[currentItemIndex]
+                    if currentItemIndex < itemsList.count {
+                        let item = itemsList[currentItemIndex]
                         if item.marketID&.isEmpty {
                             listNextItem(item: item)
                         } else {
@@ -479,7 +479,7 @@ class HomeViewController: UIViewController {
                    
                     if let currentMarketId = item.marketID {
                         removeOnMarket(id: currentMarketId) {
-                            currentItemIndex += 1
+                            itemsList[currentItemIndex].marketID = nil
                             relistNextItem()
                         }
                     } else {
@@ -627,7 +627,7 @@ class HomeViewController: UIViewController {
             var request = URLRequest(url: url)
             request.allHTTPHeaderFields = ApiUtils.shared.headersGet
             
-            print(request.cURL())
+//            print(request.cURL())
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = 1.0
             sessionConfig.timeoutIntervalForResource = 1.0
@@ -640,8 +640,8 @@ class HomeViewController: UIViewController {
 
             currentDataTaskAll = session.dataTask(with: request) { (data, response, error) in
                 if let error = error {
-                    print(error)
-                    self.getAllMarket()
+                    print(error.localizedDescription)
+                    self.recallApiIfAutoALL()
                     DispatchQueue.main.async {
                         self.titleResultLabel.text = "Result: NO DATA"
                     }
@@ -661,7 +661,7 @@ class HomeViewController: UIViewController {
                             self.statusBuyLabel.text = "LỖI: \(error.message ?? "")"
                             self.statusBuyLabel.textColor = .red
                             if error.message != "telegram data expired" {
-                                self.getAllMarket()
+                                self.recallApiIfAutoALL()
                             }
                         }  else {
                             self.recallApiIfAutoALL()
@@ -719,18 +719,16 @@ class HomeViewController: UIViewController {
                     dispatchGroup.leave()
                 })
             }
-            
-            if !itemNeedBuy.isEmpty {
-                dispatchGroup.notify(queue: .main, execute: { [weak self] in
-                    self?.recallApiWhenCompleteBuy()
-                })
-                
-            } else {
-    //            self.statusBuyLabel.text = "Không có. Thử lại!!!"
-                recallApiIfAutoALL()
-            }
-            }
-            
+        }
+        
+        if !itemNeedBuy.isEmpty {
+            dispatchGroup.notify(queue: .main, execute: { [weak self] in
+                self?.recallApiWhenCompleteBuy()
+            })
+        } else {
+            //            self.statusBuyLabel.text = "Không có. Thử lại!!!"
+            recallApiIfAutoALL()
+        }
     }
     
     func recallApiIfAutoALL() {
